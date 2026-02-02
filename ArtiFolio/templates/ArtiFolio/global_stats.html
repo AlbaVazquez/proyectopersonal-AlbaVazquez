@@ -1,0 +1,32 @@
+{% extends "ArtiFolio/base.html" %}
+{% load static %} {% block titulo %}My statistics{% endblock %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'css/style_stats.css' %}">
+
+<div class="stats-container">
+    <div class="stats-header">
+        <h2>📊 Statistics panel</h2>
+        <a href="{% url 'artwork_list' %}" class="btn-link">← Return to gallery</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ general_stats.total_artworks }}</div>
+            <div class="stat-label">Created artworks</div>
+        </div>
+        <div class="stat-card accent">
+            <div class="stat-number">{{ general_stats.total_photos }}</div>
+            <div class="stat-label">Progress photos</div>
+        </div>
+        <div class="stat-card warning">
+            <div class="stat-number">{{ general_stats.total_comments }}</div>
+            <div class="stat-label">Private comments</div>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        
+    </div>
+</div>
+{% endblock contenido %}

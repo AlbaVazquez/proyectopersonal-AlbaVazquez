@@ -1,0 +1,111 @@
+{% extends "ArtiFolio/base.html" %}
+
+{% block titulo %}Artworks list{% endblock %}
+
+{% block contenido %}
+<nav>
+    {% if user.is_authenticated %}
+        <span>Hola, {{ user.username }}</span>
+        <form action="{% url 'logout' %}" method="post" class="form-inline">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+    {% endif %}
+</nav>
+
+<div class="main-container">
+
+    <div class="stats-bar">
+        <strong>Statistics:</strong> You have a total of {{ stats.total_artworks }} artworks in your gallery.
+    </div>
+    
+    <div class="challenges-section">
+        <h3>My pending challenges</h3>
+        {% if challenges %}
+            <ul>
+                {% for challenge in challenges %}
+                    <li>
+                        <span>{{ challenge.text }}</span>
+                        <form method="post" action="{% url 'challenge_complete' challenge.id %}" class="form-inline">
+                            {% csrf_token %}
+                            <button type="submit" name="complete" class="btn-small">Completed</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no pending challenges!</p>
+        {% endif %}
+        
+        <div class="challenge-create-wrapper">
+            <a href="{% url 'challenge_create' %}" class="btn-link">Create a new challenge</a>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-header">
+            <h3>🔍 Filter Gallery</h3>
+        </div>
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label>Title</label>
+                {{ filter_form.title }}
+            </div>
+            <div class="filter-group">
+                <label>Technique</label>
+                {{ filter_form.technique }}
+            </div>
+            <div class="filter-group">
+                <label>Month</label>
+                {{ filter_form.start_month }}
+            </div>
+            <div class="filter-group">
+                <label>Year</label>
+                {{ filter_form.start_year }}
+            </div>
+            
+            <div class="filter-actions">
+                <button type="submit" class="btn-primary">Apply Filters</button>
+                <a href="{% url 'artwork_list' %}" class="btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="header-section">
+        <h2>Gallery</h2>
+        <a href="{% url 'artwork_create' %}" class="btn-primary">Upload new artwork</a>
+    </div>
+
+    <div class="artwork-grid">
+        {% for artwork in artworks %}
+        <div class="artwork-card">
+            <div class="image-container">
+                <img src="{{ artwork.final_image.url }}" alt="{{ artwork.title }}">
+            </div>
+            <div class="card-info">
+                <h5>{{ artwork.title }}</h5>
+                <p>{{ artwork.description|truncatechars:50 }}</p>
+                <p>Progress photo: {{ artwork.num_photos }}</p>
+                <a href="{% url 'artwork_detail' artwork.id %}">View details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'global_stats' %}" class="btn-primary btn-dark artwork-list-footer-btn">View stadistics</a>
+</div>
+{% endblock contenido %}

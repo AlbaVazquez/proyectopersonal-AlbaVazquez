@@ -1,0 +1,28 @@
+{% extends "ArtiFolio/base.html" %}
+
+{% block contenido %}
+<div class="container">
+    <h2>Edit an artwork</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        
+        <h3>Progress photo (Optional)</h3>
+        <p>You can add or edit progress photos here. Existing photos will appear in their respective fields.</p>
+        {{ progressphoto_formset.management_form }}
+        {% for form in progressphoto_formset %}
+            <div>
+                {{ form.as_p }}
+                {% if form.instance.image %}
+                    <p>Current image: <a href="{{ form.instance.image.url }}" target="_blank">View</a></p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Save changes</button>
+    </form>
+<a href="{% url 'artwork_detail' artwork.id %}">Cancel</a>
+</div>
+{% endblock contenido %}

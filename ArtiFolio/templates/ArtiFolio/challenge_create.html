@@ -1,0 +1,16 @@
+{% extends "ArtiFolio/base.html" %}
+
+{% block titulo%}Create a new challenge{% endblock%}
+
+{% block contenido %}
+<div>
+    <h2>Create a new challenge</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        <button type="submit">Create challenge</button>
+    </form>
+    <a href="{% url 'artwork_list' %}">Cancel</a>
+</div>
+{% endblock contenido %}

@@ -1,0 +1,24 @@
+{% extends "ArtiFolio/base.html" %}
+
+{% block titulo%}Create new Artwork{% endblock%}
+
+{% block contenido %}
+<div>
+    <h2>Create new Artwork</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        
+        <h3>Progress photo (Optional)</h3>
+        {{ progressphoto_formset.management_form }}
+        {% for progress_form in progressphoto_formset %}
+            <div>
+                {{ progress_form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit">Create new Artwork</button>
+    </form>
+    <a href="{% url 'artwork_list' %}">Cancel</a>
+</div>
+{% endblock contenido %}

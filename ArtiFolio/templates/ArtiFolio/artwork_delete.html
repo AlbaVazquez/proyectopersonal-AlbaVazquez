@@ -1,0 +1,21 @@
+{% extends "ArtiFolio/base.html" %}
+
+{% block titulo%}Delete Artwork{% endblock%}
+
+{% block contenido %}
+<div>
+    <h2>Are you sure you want to delete this artwork?</h2>
+    <div>
+        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div>
+            <h5>{{ artwork.title }}</h5>
+            <p>{{ artwork.description }}</p>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Delete Artwork</button>
+        <a href="{% url 'artwork_detail' artwork.id %}">Cancel</a>
+    </form>
+</div>
+{% endblock contenido %}
